@@ -1,18 +1,15 @@
 public class ArvoreAVL {
     Node raiz;
+    Node atual;
 
     public ArvoreAVL(){
         this.raiz = null;
+        this.atual = null;
     }
 
-    public int altura(Node node){
-        if(node == null){return -1;}
-        int esquerda = altura(node.filhoEsquerda);
-        int direita = altura(node.filhoDireita);
-        if(esquerda > direita){return 1 + esquerda;}
-        else{
-            return 1 + direita;
-        }
+    private int altura(Node node )
+    {
+        return node == null ? -1 : node.altura;
     }
     private int alturaMaxima(int alturaEsquerda, int alturaDireita)
     {
@@ -21,31 +18,32 @@ public class ArvoreAVL {
 
 
     public void inserir(int informacao){
-        inserir(raiz, informacao);
+        raiz = inserir(raiz, informacao);
     }
 
     public Node inserir(Node node, int informacao){
         if(node == null){
-            node = new Node();
-            node.informacao = informacao;
-        }
+            node = new Node(informacao);
+        } // certo
         else if(informacao < node.informacao){
             node.filhoEsquerda = inserir(node.filhoEsquerda, informacao);
             if(altura(node.filhoEsquerda) - altura(node.filhoDireita) == 2){
                 if(informacao < node.filhoEsquerda.informacao){node = rotacaoEsquerda(node);}
                 else{node = rotacaoDuplaEsquerda(node);}
             }
-        }
+        } // certo
         else if(informacao > node.informacao){
             node.filhoDireita = inserir(node.filhoDireita, informacao);
-            if(altura(node.filhoEsquerda) - altura(node.filhoDireita) == 2){
+            if(altura(node.filhoDireita) - altura(node.filhoEsquerda) == 2){
                 if(informacao > node.filhoDireita.informacao){node = rotacaoDireita(node);}
                 else{node = rotacaoDuplaDireita(node);}
             }
         }
+        else{;}
         node.altura = alturaMaxima(altura(node.filhoEsquerda), altura(node.filhoDireita)) + 1;
         return node;
     }
+
 
     private Node rotacaoEsquerda(Node raiz){
 
@@ -73,16 +71,48 @@ public class ArvoreAVL {
     }
 
 
-    public void imprimirEmOrdem(Node node) {
-        if (node != null) {
-            imprimirEmOrdem(node.filhoEsquerda); // Visita o filho esquerdo
-            System.out.print(node.informacao + " "); // Imprime o valor do nó
-            imprimirEmOrdem(node.filhoDireita); // Visita o filho direito
+    public Node busca(int informacao){
+        if(this.raiz == null){
+            return null;
+        }
+        else{
+            return busca(raiz, informacao);
         }
     }
 
-    public void imprimirEmOrdem() {
+    public Node busca(Node node, int informacao){
+        if(node.informacao == informacao){return node;}
+        else if(node.informacao > informacao){
+            if(node.filhoEsquerda != null){return busca(node.filhoEsquerda, informacao);}
+            else{return null;}
+        }
+        else{
+            if(node.filhoDireita != null){return busca(node.filhoDireita, informacao);}
+            else{return null;}
+        }
+    }
+
+    public void ImprimirBusca(Node node){
+        if(node == null){
+            System.out.println("Nao foi achado esse elemento na arvore");
+        }
+        else{
+            System.out.println(node.informacao);
+        }
+    }
+
+    public void imprimirEmOrdem()
+    {
         imprimirEmOrdem(raiz);
-        System.out.println(); // Adicione uma quebra de linha para melhorar a formatação
+    }
+    private void imprimirEmOrdem(Node head)
+    {
+        if (head != null)
+        {
+            imprimirEmOrdem(head.filhoEsquerda);
+            System.out.print(head.informacao+" ");
+            imprimirEmOrdem(head.filhoDireita);
+        }
     }
 }
+
