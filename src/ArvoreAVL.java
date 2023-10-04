@@ -114,5 +114,51 @@ public class ArvoreAVL {
             imprimirEmOrdem(head.filhoDireita);
         }
     }
+
+    public Node minimo(Node node){
+        if(node.filhoEsquerda != null){
+            return minimo(node.filhoEsquerda);
+        }
+        else{
+            return node;
+        }
+    }
+
+    public void delete(int informacao){
+        delete(raiz, informacao);
+    }
+
+    public Node delete(Node node, int informacao){
+        if(node == null){return null;}
+
+        else{
+            if(node.informacao > informacao){ //Checa se o valor para ser deletado é menor que Root. Vai mandar para subarvore da esquerda
+                node.filhoEsquerda = delete(node.filhoEsquerda, informacao);
+            }
+            else if(node.informacao < informacao){
+                node.filhoDireita = delete(node.filhoDireita, informacao);
+            }
+            else{ //Else se o valor a ser deletado foi encontrado:
+                if(node.filhoDireita == null && node.filhoEsquerda == null){
+                    node = null;
+                }
+                else if(node.filhoEsquerda == null){node = node.filhoDireita;}
+                else if(node.filhoDireita == null){node = node.filhoEsquerda;}
+                else{
+                    Node aux = minimo(node.filhoDireita);
+                    node.informacao = aux.informacao;
+                    node.filhoDireita = delete(node.filhoDireita, aux.informacao);
+                }
+            }
+            return node;
+        }
+    }
+
+    public int balance(Node node){
+        if(node == null){
+            return 0;
+        }
+        return altura(node.filhoDireita) - altura(node.filhoEsquerda);
+    }
 }
 

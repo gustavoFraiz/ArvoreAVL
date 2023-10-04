@@ -8,10 +8,9 @@ public class Main {
         tree.inserir(13);
         tree.inserir(11);
         tree.inserir(5);
-//        tree.delete(tree.raiz, 13);
-//        tree.delete(tree.raiz, 5);
-//        tree.delete(tree.raiz, 11);
-//        tree.imprimirEmOrdem();
+        tree.imprimirEmOrdem();
+        tree.delete(5);
+        tree.imprimirEmOrdem();
         tree.ImprimirBusca(tree.busca(5));
     }
 }
